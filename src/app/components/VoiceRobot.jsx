@@ -76,7 +76,7 @@ export default function VoiceRobot() {
 
   return (
     <div style={{ fontFamily: 'Inter, sans-serif', textAlign: "center", padding: "2rem" }}>
-      <h1 style={{ fontSize: "2rem", fontWeight: "600" }}>🤖 AI Voice Assistant</h1>
+    
 
       <div style={{ height: "400px", margin: "2rem 0" }}>
         <Spline scene="https://prod.spline.design/eM7sw0lhDgG3nzVS/scene.splinecode" />
