@@ -78,8 +78,8 @@ export default function VoiceRobot() {
     <div style={{ fontFamily: 'Inter, sans-serif', textAlign: "center", padding: "2rem" }}>
     
 
-      <div style={{ height: "400px", margin: "2rem 0" }}>
-        <Spline scene="https://prod.spline.design/eM7sw0lhDgG3nzVS/scene.splinecode" />
+      <div style={{ height: "550px", margin: "1rem 0" }}>
+        <Spline scene="https://prod.spline.design/7HZPolREazLOi7Sv/scene.splinecode" />
       </div>
 
       <button
