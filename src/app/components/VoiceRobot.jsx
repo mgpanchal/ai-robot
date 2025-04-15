@@ -22,7 +22,8 @@ export default function VoiceRobot() {
     setIsListening(true);
     setResponseText("");
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
       alert("Your browser does not support speech recognition.");
       return;
@@ -49,8 +50,6 @@ export default function VoiceRobot() {
         setIsListening(false);
       }
     };
-
-    
 
     recognition.start();
   };
@@ -93,20 +92,26 @@ export default function VoiceRobot() {
   };
 
   return (
-    <div style={{ fontFamily: "Inter, sans-serif", textAlign: "center", padding: "2rem" }}>
-
-
+    <div
+      style={{
+        fontFamily: "Inter, sans-serif",
+        textAlign: "center",
+        padding: "2rem",
+      }}
+    >
       <div style={{ position: "relative", height: "500px", margin: "1rem 0" }}>
-  <Spline scene="https://prod.spline.design/xyLfV9S5GJUUESml/scene.splinecode" />
-  <div style={{
-    position: "absolute",
-    bottom: 20,
-    right: 10,
-    width: "170px",
-    height: "50px",
-    backgroundColor: "#121212" 
-  }} />
-</div>
+        <Spline scene="https://prod.spline.design/xyLfV9S5GJUUESml/scene.splinecode" />
+        <div
+          style={{
+            position: "absolute",
+            bottom: 20,
+            right: 10,
+            width: "170px",
+            height: "50px",
+            backgroundColor: "#121212",
+          }}
+        />
+      </div>
 
       <button
         onClick={startListening}
@@ -133,7 +138,11 @@ export default function VoiceRobot() {
         {loading ? (
           <TypingDots />
         ) : (
-          responseText && <p style={{ fontSize: "1.1rem", fontWeight: 500 }}>{responseText}</p>
+          responseText && (
+            <p style={{ fontSize: "1.1rem", fontWeight: 500 }}>
+              {responseText}
+            </p>
+          )
         )}
       </div>
 
@@ -161,7 +170,9 @@ export default function VoiceRobot() {
 function TypingDots() {
   return (
     <div style={{ fontSize: "1.2rem", fontWeight: 500 }}>
-      <span style={{ animation: "blink 1s infinite" }}>🤖 NexBot is thinking</span>
+      <span style={{ animation: "blink 1s infinite" }}>
+        🤖 NexBot is thinking
+      </span>
       <span className="dots">...</span>
 
       <style jsx>{`
