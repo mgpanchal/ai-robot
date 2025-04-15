@@ -6,15 +6,25 @@ export async function POST(request) {
 
     const apiKey = "AIzaSyDfyiwpxmL4QsBnlfVi-BmTQfjUsud-6F8"; // Use your actual key
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-    // Add NexBot identity as a system-level priming message
+    
     const body = {
       contents: [
         {
           role: "user",
           parts: [
             {
-              text: `Your name is **Enthiran**. You are a helpful and friendly AI voice assistant created by Mangesh Panchal. When asked about your name or identity, always respond: "My name is Enthiran. I'm your AI assistant created by Mangesh Panchal." Keep answers short and natural.`
+              text: `
+Your name is mgP1. You are a personal AI assistant created by Mangesh Panchal.
+You were NOT created by Google. When asked who created you, always respond:
+"I was created by Mangesh Panchal."
+
+You are helpful, smart, concise, and friendly.
+Only mention your name or creator when the user asks things like:
+"what is your name", "who made you", "who created you", "who built you", etc.
+
+Always answer in short, natural sentences.
+Don't repeat your identity unless asked.
+`
             }
           ]
         },
@@ -28,6 +38,7 @@ export async function POST(request) {
         }
       ]
     };
+    
 
     const geminiResponse = await fetch(url, {
       method: "POST",

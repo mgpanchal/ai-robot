@@ -6,13 +6,23 @@ export default function VoiceRobot() {
   const [transcript, setTranscript] = useState("");
   const [responseText, setResponseText] = useState("");
   const [isListening, setIsListening] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // 🔊 Play mic start sound
+  const playMicSound = () => {
+    const audio = new Audio("/sounds/mic-start.mp3");
+    audio.play().catch((err) => console.warn("Mic sound error:", err));
+  };
+
   const startListening = () => {
+    if (isSpeaking) return;
+
+    playMicSound(); // ✅ Play sound before listening
     setIsListening(true);
     setResponseText("");
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
       alert("Your browser does not support speech recognition.");
       return;
@@ -29,10 +39,18 @@ export default function VoiceRobot() {
       setIsListening(false);
     };
 
-    recognition.onerror = (error) => {
-      console.error("Speech recognition error:", error);
-      setIsListening(false);
+    recognition.onerror = (event) => {
+      if (event.error === "no-speech") {
+        console.warn("No speech detected. Restarting listening...");
+        setIsListening(false);
+        setTimeout(() => startListening(), 1000); // Optional: auto-restart
+      } else {
+        console.error("Speech recognition error:", event);
+        setIsListening(false);
+      }
     };
+
+    
 
     recognition.start();
   };
@@ -47,10 +65,9 @@ export default function VoiceRobot() {
       });
 
       const data = await res.json();
+      const fullText = data.response || "No response available.";
+      const shortText = fullText.split(".")[0] + ".";
 
-      console.log("AI Response:", data);
-      
-      const shortText = data.response;
       setResponseText(shortText);
       speakOut(shortText);
     } catch (error) {
@@ -64,40 +81,52 @@ export default function VoiceRobot() {
   const speakOut = (text) => {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "en-US";
-  
+    setIsSpeaking(true);
+
     utterance.onend = () => {
-      // 👂 Automatically start listening after speaking
-      startListening();
+      setIsSpeaking(false);
+      // ✅ Auto restart listening after speaking
+      setTimeout(() => startListening(), 1000);
     };
-  
+
     window.speechSynthesis.speak(utterance);
   };
-  
 
   return (
-    <div style={{ fontFamily: 'Inter, sans-serif', textAlign: "center", padding: "2rem" }}>
-    
+    <div style={{ fontFamily: "Inter, sans-serif", textAlign: "center", padding: "2rem" }}>
 
-      <div style={{ height: "500px", margin: "1rem 0" }}>
-        <Spline scene="https://prod.spline.design/7HZPolREazLOi7Sv/scene.splinecode" />
-      </div>
+
+      <div style={{ position: "relative", height: "500px", margin: "1rem 0" }}>
+  <Spline scene="https://prod.spline.design/xyLfV9S5GJUUESml/scene.splinecode" />
+  <div style={{
+    position: "absolute",
+    bottom: 20,
+    right: 10,
+    width: "170px",
+    height: "50px",
+    backgroundColor: "#121212" 
+  }} />
+</div>
 
       <button
         onClick={startListening}
-        disabled={isListening || loading}
+        disabled={isListening || isSpeaking}
         style={{
-          padding: "12px 24px",
+          padding: "14px 26px",
           fontSize: "1rem",
-          backgroundColor: "#4f46e5",
+          backgroundColor: isListening ? "#16a34a" : "#4f46e5",
           color: "#fff",
           border: "none",
-          borderRadius: "12px",
+          borderRadius: "50px",
           cursor: "pointer",
-          boxShadow: isListening ? "0 0 10px #4f46e5" : "none",
+          transition: "all 0.3s ease",
+          boxShadow: isListening
+            ? "0 0 20px rgba(34, 197, 94, 0.8)"
+            : "0 4px 6px rgba(0, 0, 0, 0.1)",
           animation: isListening ? "pulse 1.5s infinite" : "none",
         }}
       >
-        {isListening ? "Listening..." : "🎙️ Talk to Robot"}
+        {isListening ? "🎙️ Listening..." : "🎤 Ask NexBot"}
       </button>
 
       <div style={{ marginTop: "2rem", minHeight: "80px" }}>
@@ -111,13 +140,16 @@ export default function VoiceRobot() {
       <style jsx>{`
         @keyframes pulse {
           0% {
-            box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7);
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
           }
           70% {
-            box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+            transform: scale(1.05);
+            box-shadow: 0 0 0 15px rgba(34, 197, 94, 0);
           }
           100% {
-            box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
           }
         }
       `}</style>
@@ -125,10 +157,11 @@ export default function VoiceRobot() {
   );
 }
 
+// Typing animation while fetching
 function TypingDots() {
   return (
     <div style={{ fontSize: "1.2rem", fontWeight: 500 }}>
-      <span style={{ animation: "blink 1s infinite" }}>🤖 Robot is thinking</span>
+      <span style={{ animation: "blink 1s infinite" }}>🤖 NexBot is thinking</span>
       <span className="dots">...</span>
 
       <style jsx>{`
@@ -138,15 +171,28 @@ function TypingDots() {
         }
 
         @keyframes dots {
-          0% { content: ""; }
-          33% { content: "."; }
-          66% { content: ".."; }
-          100% { content: "..."; }
+          0% {
+            content: "";
+          }
+          33% {
+            content: ".";
+          }
+          66% {
+            content: "..";
+          }
+          100% {
+            content: "...";
+          }
         }
 
         @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
+          0%,
+          100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.4;
+          }
         }
       `}</style>
     </div>
