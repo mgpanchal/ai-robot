@@ -131,7 +131,7 @@ export default function VoiceRobot() {
           animation: isListening ? "pulse 1.5s infinite" : "none",
         }}
       >
-        {isListening ? "🎙️ Listening..." : "🎤 Ask NexBot"}
+        {isListening ? "🎙️ Listening..." : "🎤 Ask Atlas"}
       </button>
 
       <div style={{ marginTop: "2rem", minHeight: "80px" }}>
@@ -139,7 +139,7 @@ export default function VoiceRobot() {
           <TypingDots />
         ) : (
           responseText && (
-            <p style={{ fontSize: "1.1rem", fontWeight: 500 }}>
+            <p style={{ fontSize: "1.1rem", fontWeight: 500, color: "#fff" }}>
               {responseText}
             </p>
           )
@@ -169,9 +169,9 @@ export default function VoiceRobot() {
 // Typing animation while fetching
 function TypingDots() {
   return (
-    <div style={{ fontSize: "1.2rem", fontWeight: 500 }}>
+    <div style={{ fontSize: "1.2rem", fontWeight: 500, color: "#fff" }}>
       <span style={{ animation: "blink 1s infinite" }}>
-        🤖 NexBot is thinking
+        🤖 Atlas is thinking
       </span>
       <span className="dots">...</span>
 
