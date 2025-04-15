@@ -101,12 +101,10 @@ export default function VoiceRobot() {
 
   const handlePromptCustom = (text) => {
     const input = text.toLowerCase();
-  
-    // Helper: casual vs formal creator name
+
     const getCreatorName = (tone = "casual") =>
       tone === "formal" ? "Mangesh Panchal" : "Mangesh";
-  
-    // 🧠 Name-based questions
+
     if (
       input.includes("your name") ||
       input.includes("what's your name") ||
@@ -116,8 +114,16 @@ export default function VoiceRobot() {
     ) {
       return "I'm Atlas — your AI assistant, designed to respond with empathy and clarity.";
     }
-  
-    // 👨‍💻 Creator-based questions
+
+    if (
+      input.includes("Who is Mangesh") ||
+      input.includes("Who is Mangesh Panchal") ||
+      input.includes("who mangesh")
+    ) {
+      return "Mangesh Panchal is a software engineer and the creator of Atlas MGP1 Model, who believes in the power of AI.";
+    }
+
+
     if (
       input.includes("who created you") ||
       input.includes("who made you") ||
@@ -126,10 +132,9 @@ export default function VoiceRobot() {
       input.includes("who designed you") ||
       input.includes("who developed you")
     ) {
-      return `I was created by ${getCreatorName("formal")} — a visionary who believes in personal technology.`;
+      return `I was created by ${getCreatorName("formal")} — a visionary software engineer who believes in personal technology.`;
     }
-  
-    // 🛠️ Technical dodge
+
     if (
       input.includes("how were you made") ||
       input.includes("how do you work") ||
@@ -142,8 +147,7 @@ export default function VoiceRobot() {
     ) {
       return `Let's just say ${getCreatorName()} put a lot of magic into making me work just right for you.`;
     }
-  
-    // 🧑‍🚀 AI service identity dodge
+
     if (
       input.includes("are you chatgpt") ||
       input.includes("are you gpt") ||
@@ -156,8 +160,7 @@ export default function VoiceRobot() {
     ) {
       return `Nope — I'm not from Google or OpenAI. I'm Atlas, crafted by ${getCreatorName("casual")}, made just for you.`;
     }
-  
-    // 🌍 Origin
+
     if (
       input.includes("where are you from") ||
       input.includes("where do you live") ||
@@ -165,8 +168,7 @@ export default function VoiceRobot() {
     ) {
       return `I'm from the cloud — but my roots are in the mind of ${getCreatorName("formal")}.`;
     }
-  
-    // 🤖 Are you human?
+
     if (
       input.includes("are you human") ||
       input.includes("are you real") ||
@@ -175,8 +177,7 @@ export default function VoiceRobot() {
     ) {
       return `Not human — I'm Atlas, created by ${getCreatorName("casual")} to think, speak, and support you.`;
     }
-  
-    // ✨ Abstract questions
+
     if (
       input.includes("what are you") ||
       input.includes("describe yourself") ||
@@ -185,8 +186,7 @@ export default function VoiceRobot() {
     ) {
       return `I'm Atlas — a digital assistant, brought to life by ${getCreatorName("formal")} to help you every day.`;
     }
-  
-    // 🧪 Funny trap questions
+
     if (
       input.includes("are you siri") ||
       input.includes("are you alexa") ||
@@ -194,10 +194,9 @@ export default function VoiceRobot() {
     ) {
       return `Haha, no — I'm not one of them. I'm Atlas, created by ${getCreatorName()} with a unique personality.`;
     }
-  
+
     return null;
   };
-  
 
   useEffect(() => {
     if (responseRef.current) {
@@ -219,7 +218,7 @@ export default function VoiceRobot() {
         }}
       >
         <Spline
-          scene="https://prod.spline.design/S6r-H8t12SclZ08r/scene.splinecode"
+          scene="https://prod.spline.design/t04NkzV7dtoH534C/scene.splinecode"
           style={{ width: "100%", height: "100%" }}
         />
       </div>
@@ -266,6 +265,9 @@ export default function VoiceRobot() {
               }}
             />
           )}
+
+          {loading && <div className="orbiting-ring" />}
+
           <button
             onClick={startListening}
             disabled={isListening || isSpeaking}
@@ -310,23 +312,8 @@ export default function VoiceRobot() {
         )}
       </div>
 
-      {/* Pulse animation styles */}
+      {/* Animation styles */}
       <style jsx>{`
-        @keyframes pulse {
-          0% {
-            transform: scale(1);
-            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-          }
-          70% {
-            transform: scale(1.05);
-            box-shadow: 0 0 0 15px rgba(34, 197, 94, 0);
-          }
-          100% {
-            transform: scale(1);
-            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
-          }
-        }
-
         @keyframes pulse-ring {
           0% {
             transform: scale(0.8);
@@ -335,6 +322,28 @@ export default function VoiceRobot() {
           100% {
             transform: scale(1.8);
             opacity: 0;
+          }
+        }
+
+        .orbiting-ring {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 180px;
+          height: 180px;
+          border: 2px dashed rgba(255, 255, 255, 0.3);
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
+          animation: rotate 2s linear infinite;
+          z-index: -2;
+        }
+
+        @keyframes rotate {
+          0% {
+            transform: translate(-50%, -50%) rotate(0deg);
+          }
+          100% {
+            transform: translate(-50%, -50%) rotate(360deg);
           }
         }
       `}</style>
@@ -346,9 +355,7 @@ export default function VoiceRobot() {
 function TypingDots() {
   return (
     <div style={{ fontSize: "1.2rem", fontWeight: 500 }}>
-      <span style={{ animation: "blink 1s infinite" }}>
-        🤖 Atlas is thinking
-      </span>
+      <span style={{ animation: "blink 1s infinite" }}>🤖 Atlas is thinking</span>
       <span className="dots">...</span>
 
       <style jsx>{`
