@@ -6,9 +6,12 @@ import React from "react";
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 
 export const metadata = {
-  title: "mgP AI Model Project",
-  description: "Talk to your AI robot powered by Google AI Studio",
-};
+  title: "Atlas mgP AI Model V1 - Mangesh Panchal",
+  description: "Advanced Humanoid voice AI Model Project by Mangesh Panchal",
+  icons: {
+    icon: "/favicon.png",
+  },
+};  
 
 export default function RootLayout({ children }) {
   return (
