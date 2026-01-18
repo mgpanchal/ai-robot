@@ -1,36 +1,183 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Atlas (ai-robot)
 
-## Getting Started
+A voice-driven **3D AI assistant** built with **Next.js (App Router)** + **Spline**.
 
-First, run the development server:
+- 🎙️ Click-to-talk voice input (Web Speech API)
+- 🤖 AI replies via a server API route (`/api/ai`)
+- 🔊 Text-to-speech responses (Speech Synthesis API)
+- 🧩 3D robot/scene powered by **Spline** (swap scenes by voice)
+
+> Project name in `package.json`: **ai-robot**
+
+---
+
+## Demo features
+
+### Voice commands (built-in)
+- **“change background / change avatar / change look”** → cycles Spline scenes
+- **“open new tab”** → opens `https://cioviews.com` in a new tab
+- Identity/creator Q&A handled locally (see `handlePromptCustom()` in `VoiceRobot.jsx`)
+
+### Main flow
+1. Click **Ask Atlas**
+2. Speak your prompt
+3. App sends the prompt to **`POST /api/ai`**
+4. Receives AI text, speaks it aloud, and auto-listens again
+
+---
+
+## Tech stack
+
+- **Next.js 15** (App Router)
+- **React 19**
+- **@splinetool/react-spline** for 3D scenes
+- Browser APIs:
+  - `SpeechRecognition` / `webkitSpeechRecognition`
+  - `speechSynthesis`
+
+---
+
+## Project structure
+
+```
+ai-robot/
+  public/
+    sounds/mic-start.mp3
+  src/app/
+    api/ai/route.js           # Server route that calls the AI model
+    components/VoiceRobot.jsx  # UI + voice input/output
+    layout.js
+    page.js
+    globals.css
+```
+
+---
+
+## Getting started
+
+### 1) Install
+
+```bash
+npm install
+```
+
+### 2) Configure environment variables (recommended)
+
+Right now the AI route contains an API key inline in:
+
+- `src/app/api/ai/route.js`
+
+**For GitHub / production you should move it to an env var.**
+
+Create a file named **`.env.local`** in the project root:
+
+```bash
+GEMINI_API_KEY=YOUR_KEY_HERE
+```
+
+Then update the code in `route.js` to read:
+
+```js
+const apiKey = process.env.GEMINI_API_KEY;
+```
+
+> Never commit real API keys to GitHub.
+
+### 3) Run dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open: `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## How the AI route works
 
-## Learn More
+**`POST /api/ai`** expects JSON:
 
-To learn more about Next.js, take a look at the following resources:
+```json
+{ "prompt": "your message" }
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+It calls Google’s **Generative Language API** (Gemini) and returns:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```json
+{ "response": "model output" }
+```
 
-## Deploy on Vercel
+Files:
+- `src/app/api/ai/route.js`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Customize
+
+### Change the 3D scenes
+Edit the `splineScenes` array in:
+- `src/app/components/VoiceRobot.jsx`
+
+```js
+const splineScenes = [
+  "https://prod.spline.design/.../scene.splinecode",
+  // ...
+];
+```
+
+### Change the mic sound
+Replace:
+- `public/sounds/mic-start.mp3`
+
+### Change behavior for special commands
+Edit:
+- `handlePromptCustom()` inside `VoiceRobot.jsx`
+
+---
+
+## Deployment
+
+### Vercel
+- Import the repo
+- Add environment variable `GEMINI_API_KEY`
+- Deploy
+
+### Node server
+
+```bash
+npm run build
+npm run start
+```
+
+---
+
+## Troubleshooting
+
+### Speech recognition not working
+- Works best in **Chrome** / **Edge**
+- Make sure microphone permission is allowed
+- On some browsers `SpeechRecognition` is not available (you’ll see the alert)
+
+### No audio output
+- Check system volume
+- Some browsers require a user gesture before speech output
+
+### API errors
+- Confirm `GEMINI_API_KEY` is valid
+- Check your quota / billing settings for the key
+
+---
+
+## Security notes
+
+- Do **not** hardcode API keys in `route.js`.
+- Consider adding:
+  - rate limiting
+  - basic auth/session checks
+  - request validation (max prompt size)
+
+---
+
+## License
+
+Add a license if you plan to open-source this.
