@@ -197,6 +197,6 @@ If you’d like to improve this project, feel free to **fork the repo and submit
 ---
 
 ## 🎉 Acknowledgments
-Built with ❤️ by **Mangesh G. Panchal**  
+Built with ❤️ by **Mangesh Panchal**  
 
 Made with **modern web standards** and **best practices**.
