@@ -178,6 +178,25 @@ npm run start
 
 ---
 
-## License
+## 📄 License
+This project is licensed under the **MIT License** — you are free to use it for both **personal and commercial projects**.
 
-Add a license if you plan to open-source this.
+---
+
+## 🤝 Contributing
+Contributions are welcome!  
+If you’d like to improve this project, feel free to **fork the repo and submit a Pull Request**.
+
+---
+
+## 📞 Support
+- 📘 Documentation: *(Coming soon)*
+- 🐞 Issues: GitHub Issues tab
+- 📧 Email: **mail@mpanchal.com**
+
+---
+
+## 🎉 Acknowledgments
+Built with ❤️ by **Mangesh G. Panchal**  
+
+Made with **modern web standards** and **best practices**.
