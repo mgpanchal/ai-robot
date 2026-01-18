@@ -15,7 +15,7 @@ A voice-driven **3D AI assistant** built with **Next.js (App Router)** + **Splin
 
 ### Voice commands (built-in)
 - **“change background / change avatar / change look”** → cycles Spline scenes
-- **“open new tab”** → opens `https://cioviews.com` in a new tab
+- **“open new tab”** → opens `https://mpanchal.com` in a new tab
 - Identity/creator Q&A handled locally (see `handlePromptCustom()` in `VoiceRobot.jsx`)
 
 ### Main flow
