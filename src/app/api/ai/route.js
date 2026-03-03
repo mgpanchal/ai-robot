@@ -4,7 +4,7 @@ export async function POST(request) {
   try {
     const { prompt } = await request.json();
 
-    const apiKey = "AIzaSyDfyiwpxmL4QsBnlfVi-BmTQfjUsud-6F8"; // Your Gemini API key
+    const apiKey = process.env.GEMINI_API_KEY;
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
     const body = {
@@ -54,7 +54,7 @@ export async function POST(request) {
 
     if (!geminiResponse.ok) {
       const errorData = await geminiResponse.text();
-      // Optionally log error silently or to external service here
+      console.error("Gemini API error:", geminiResponse.status, errorData);
       return NextResponse.json(
         { response: "Sorry, I couldn't process your request right now." },
         { status: 500 }
@@ -67,8 +67,8 @@ export async function POST(request) {
       data.candidates?.[0]?.content?.parts?.[0]?.text || "I'm not sure how to respond to that.";
 
     return NextResponse.json({ response: responseText });
-  } catch {
-    // Optionally log to external monitoring service here
+  } catch (error) {
+    console.error("Error processing AI request:", error);
     return NextResponse.json(
       { response: "Oops! Something went wrong. Please try again." },
       { status: 500 }
