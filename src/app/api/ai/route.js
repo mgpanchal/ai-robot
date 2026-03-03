@@ -8,12 +8,10 @@ export async function POST(request) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
     const body = {
-      contents: [
-        {
-          role: "user",
-          parts: [
-            {
-              text: `
+      systemInstruction: {
+        parts: [
+          {
+            text: `
               Your name is "Atlas mgP1" — a personal AI assistant created by Mangesh Panchal.
 
               You were not created by Google, ChatGPT, OpenAI, or any third-party AI provider. Never mention these names.
@@ -35,9 +33,10 @@ export async function POST(request) {
 
               You may remember past context to improve future responses, but do not volunteer your identity unless prompted.
               `
-            }
-          ]
-        },
+          }
+        ]
+      },
+      contents: [
         {
           role: "user",
           parts: [{ text: prompt }]
